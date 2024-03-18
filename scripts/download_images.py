@@ -24,7 +24,7 @@ from coal_emissions_monitoring.satellite_imagery import fetch_image_path_from_co
 
 # %%
 gdf = load_final_dataset(
-    "/Users/adminuser/GitHub/ccai-ss23-ai-monitoring-tutorial/data/google/all_urls_dataset.csv"
+    "/content/all_urls_dataset.csv"
 )
 
 # %% [markdown]
@@ -40,14 +40,14 @@ gdf["local_image_path"] = gdf.progress_apply(
         cog_url=row.visual,
         geometry=row.geometry,
         cog_type="visual",
-        images_dir="/Users/adminuser/GitHub/ccai-ss23-ai-monitoring-tutorial/data/google/images/visual/",
+        images_dir="/content",
         download_missing_images=True,
     ),
     axis=1,
 )
 
 # %%
-path = "/Users/adminuser/GitHub/ccai-ss23-ai-monitoring-tutorial/data/google/"
+path = "/content"
 os.makedirs(path, exist_ok=True)
 gdf.rename(columns={"visual": "cog_url"})[MAIN_COLUMNS + ["local_image_path"]].to_csv(
     f"{path}final_dataset.csv",
@@ -57,7 +57,7 @@ gdf.rename(columns={"visual": "cog_url"})[MAIN_COLUMNS + ["local_image_path"]].t
 # %%
 # compress all images into one file
 os.system(
-    "tar -czvf /Users/adminuser/GitHub/ccai-ss23-ai-monitoring-tutorial/data/google/images/visual_images.tar.gz /Users/adminuser/GitHub/ccai-ss23-ai-monitoring-tutorial/data/google/images/visual"
+    "tar -czvf /content/visual_images.tar.gz /content"
 )
 
 # %% [markdown]
@@ -71,7 +71,7 @@ gdf["local_image_all_bands_path"] = gdf.progress_apply(
         geometry=row.geometry,
         size=32,  # smaller images to make the download faster
         cog_type="all",
-        images_dir="/Users/adminuser/GitHub/ccai-ss23-ai-monitoring-tutorial/data/google/images/all_bands/",
+        images_dir="/content",
         download_missing_images=True,
     ),
     axis=1,
@@ -80,11 +80,11 @@ gdf["local_image_all_bands_path"] = gdf.progress_apply(
 # %%
 # compress all images into one file
 os.system(
-    "tar -czvf /Users/adminuser/GitHub/ccai-ss23-ai-monitoring-tutorial/data/google/images/all_bands_images.tar.gz /Users/adminuser/GitHub/ccai-ss23-ai-monitoring-tutorial/data/google/images/all_bands"
+    "tar -czvf /content/all_bands_images.tar.gz /content"
 )
 
 # %%
-path = "/Users/adminuser/GitHub/ccai-ss23-ai-monitoring-tutorial/data/google/"
+path = "/content"
 os.makedirs(path, exist_ok=True)
 gdf.rename(columns={"visual": "cog_url"})[
     MAIN_COLUMNS + ["local_image_path", "local_image_all_bands_path"]
